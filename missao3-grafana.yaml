@@ -6,7 +6,7 @@ packages:
   - docker.io
   - git
 
-# Cria o grupo docker antes do usuário
+# Cria o grupo docker antes do usuario
 groups:
   - docker
 
@@ -17,29 +17,29 @@ users:
     groups: [sudo, docker]
     sudo: ALL=(ALL) NOPASSWD:ALL
 
-# Escreve em /tmp para não conflitar com a criação do home do usuário aluno
+# Escreve em /tmp para nao conflitar com a criacao do home do aluno
 write_files:
   - path: /tmp/bem-vindo.txt
     permissions: '0644'
     content: |
-      Bem-vindo ao laboratório de Cloud-init!
+      Bem-vindo ao laboratorio de Cloud-init!
 
-      - Usuário: aluno (sudo sem senha, grupo docker)
+      - Usuario: aluno (sudo sem senha, grupo docker)
       - Grafana rodando em http://<IP-DA-VM>:3000
-      - Login padrão do Grafana: admin / admin
-      - Comandos úteis: docker ps | git --version
+      - Login padrao do Grafana: admin / admin
+      - Comandos uteis: docker ps | git --version
 
 runcmd:
   - systemctl enable --now docker
 
-  # Garante o home do usuário aluno com dono correto
+  # Garante o home do usuario aluno com dono correto
   - install -d -o aluno -g aluno /home/aluno
 
-  # Move o arquivo de boas-vindas para o home e ajusta dono
+  # Move o arquivo de boas-vindas e ajusta dono
   - mv /tmp/bem-vindo.txt /home/aluno/bem-vindo.txt
   - chown aluno:aluno /home/aluno/bem-vindo.txt
 
-  # Reforça o ownership de todo o home
+  # Reforca o ownership de todo o home
   - chown -R aluno:aluno /home/aluno
 
   # Sobe o Grafana

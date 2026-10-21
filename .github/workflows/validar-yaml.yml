@@ -16,7 +16,16 @@ jobs:
           sudo apt-get update
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y cloud-init yamllint
 
-      - name: Verificar cabeçalho #cloud-config
+      - name: Diagnostico dos arquivos (encoding / EOL)
+        run: |
+          for f in missao*.yaml; do
+            echo "==> $f"
+            file "$f"
+            printf 'ultimo byte: '; tail -c1 "$f" | xxd -p
+            echo
+          done
+
+      - name: Verificar cabecalho #cloud-config
         run: |
           shopt -s nullglob
           files=(missao*.yaml)
@@ -27,7 +36,7 @@ jobs:
           for f in "${files[@]}"; do
             head -n1 "$f" | grep -qx '#cloud-config' \
               || { echo "::error file=$f::Primeira linha deve ser #cloud-config"; exit 1; }
-            echo "OK cabeçalho: $f"
+            echo "OK cabecalho: $f"
           done
 
       - name: Validar sintaxe YAML (yamllint)

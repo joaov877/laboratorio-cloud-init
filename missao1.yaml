@@ -1,16 +1,13 @@
 #cloud-config
 
-
+# Atualiza o indice de pacotes
 package_update: true
 
-)
-package_upgrade: true
-
-# Instalação do servidor web Nginx
+# Instala o servidor web Nginx
 packages:
   - nginx
 
-# Criação da página inicial HTML
+# Cria a pagina HTML personalizada
 write_files:
   - path: /var/www/html/index.html
     owner: root:root
@@ -20,17 +17,16 @@ write_files:
       <html lang="pt-BR">
       <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Laboratório Cloud-init</title>
+        <title>Laboratorio Cloud-init</title>
       </head>
       <body>
         <h1>Servidor configurado com sucesso!</h1>
-        <p>Esta página foi criada automaticamente pelo Cloud-init.</p>
-        <p>Missão 1 - Multipass e Nginx.</p>
+        <p>Esta pagina foi criada automaticamente pelo Cloud-init.</p>
+        <p>Missao 1 - Multipass e Nginx.</p>
       </body>
       </html>
 
-# Reinicia o Nginx depois da criação da página
+# Reinicia o Nginx para ler a nova pagina
 runcmd:
-  - systemctl enable nginx
-  - systemctl restart nginx
+   - systemctl enable nginx
+   - systemctl restart nginx
