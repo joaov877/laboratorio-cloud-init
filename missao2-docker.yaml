@@ -8,7 +8,7 @@ packages:
   - docker.io
 
 runcmd:
-  # Habilita no boot e inicia o Docker 
+  # Habilita no boot e inicia o Docker agora
   - systemctl enable --now docker
   # Sobe o container em modo detached: porta 8080 do host -> porta 80 do container
   - docker run -d --name hello --restart unless-stopped -p 8080:80 nginxdemos/hello

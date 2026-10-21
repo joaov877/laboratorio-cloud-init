@@ -28,5 +28,5 @@ write_files:
 
 # Reinicia o Nginx para ler a nova pagina
 runcmd:
-   - systemctl enable nginx
-   - systemctl restart nginx
+  - systemctl enable nginx
+  - systemctl restart nginx
