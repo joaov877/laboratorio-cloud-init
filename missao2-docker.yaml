@@ -1,0 +1,14 @@
+#cloud-config
+
+
+package_update: true
+
+# Instala o Docker oficial do repositório Ubuntu
+packages:
+  - docker.io
+
+runcmd:
+  
+  - systemctl enable --now docker
+  # Sobe o container em modo detached: porta 8080 do host -> porta 80 do container
+  - docker run -d --name hello --restart unless-stopped -p 8080:80 nginxdemos/hello

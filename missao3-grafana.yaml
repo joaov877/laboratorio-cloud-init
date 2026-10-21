@@ -1,0 +1,46 @@
+#cloud-config
+
+package_update: true
+
+packages:
+  - docker.io
+  - git
+
+# Cria o grupo docker antes do usuário
+groups:
+  - docker
+
+users:
+  - default
+  - name: aluno
+    shell: /bin/bash
+    groups: [sudo, docker]
+    sudo: ALL=(ALL) NOPASSWD:ALL
+
+# Escreve em /tmp para não conflitar com a criação do home do usuário aluno
+write_files:
+  - path: /tmp/bem-vindo.txt
+    permissions: '0644'
+    content: |
+      Bem-vindo ao laboratório de Cloud-init!
+
+      - Usuário: aluno (sudo sem senha, grupo docker)
+      - Grafana rodando em http://<IP-DA-VM>:3000
+      - Login padrão do Grafana: admin / admin
+      - Comandos úteis: docker ps | git --version
+
+runcmd:
+  - systemctl enable --now docker
+
+  # Garante o home do usuário aluno com dono correto
+  - install -d -o aluno -g aluno /home/aluno
+
+  # Move o arquivo de boas-vindas para o home e ajusta dono
+  - mv /tmp/bem-vindo.txt /home/aluno/bem-vindo.txt
+  - chown aluno:aluno /home/aluno/bem-vindo.txt
+
+  # Reforça o ownership de todo o home
+  - chown -R aluno:aluno /home/aluno
+
+  # Sobe o Grafana
+  - docker run -d --name grafana --restart unless-stopped -p 3000:3000 grafana/grafana:latest
